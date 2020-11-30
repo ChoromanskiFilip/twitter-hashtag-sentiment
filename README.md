@@ -1,5 +1,16 @@
 # twitter-hashtag-sentiment
 
+1. [Description](#Description)
+1. [Contributors](#Contributors)
+    1. [Filip Choromański](#Filip-Choromański)
+    1. [Bartłomiej Królak](#Bartłomiej-Królak)
+1. [Features](#Features)
+1. [Solution](#Solution)
+    1. [Architecture](#Architecture)
+    1. [Tech Stack](#Tech-Stack)
+1. [TODO](#TODO)
+
+
 ## Description
 Aspect based sentiment analysis of hashtags used in twitter posts using Azure services.
 
