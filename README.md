@@ -39,7 +39,7 @@ Additional features:
 As a welcome screen user will see input field where he/she should provide hashtag for which sentiment will be determined. After user submits the hashtag, request to web API will be send. API will count sentiment using Text Analytics API service available in Azure.  Then it will respond with a JSON object containing sentiment score, and few example tweets for given input. Additionally user can request more detailed information for the hashtag e.g. popularity and sentiment over time.
 
 ### Architecture
-
+![Application Archtecture Diagram](pics/architecture-twitter-hashtag-sentiment.png)
 
 ### Tech Stack
 
