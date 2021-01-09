@@ -1,1 +1,1 @@
-azure-ai-textanalytics
+aspect-based-sentiment-analysis
