@@ -23,9 +23,9 @@ def analyze_sentiment(text, aspect):
 def analyze_sentiment_absa(text, aspect):
     aspect_sentiment = nlp(text, aspects=[aspect])
     return {
-        'result': aspect_sentiment.subtasks[aspect].sentiment.name,
-        'positive': aspect_sentiment.subtasks[aspect].scores[2],
-        'negative': aspect_sentiment.subtasks[aspect].scores[1]
+        'sentiment_result': aspect_sentiment.subtasks[aspect].sentiment.name,
+        'positive_value': aspect_sentiment.subtasks[aspect].scores[2].item(),
+        'negative_value': aspect_sentiment.subtasks[aspect].scores[1].item()
     }
 
 
