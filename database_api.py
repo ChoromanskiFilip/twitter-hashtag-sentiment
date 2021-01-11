@@ -76,6 +76,14 @@ def save_hashtag(hashtag, active=True):
     conn.commit()
 
 
+def get_active_hashtags():
+    cursor = conn.cursor()
+    cursor.execute("SELECT h.hashtag FROM Hashtags AS h")
+    rows = cursor.fetchall()
+    return list(map(lambda x: x.hashtag, rows))
+
+
+# print(get_active_hashtags())
 # print(extract_unprocessed_tweets(['asd', 'Słabo #AndrzejDuda']))
 # print(get_tweets_with_sentiment('#AndrzejDuda'))
 # print(find_hashtag_id('#AndrzejDuda'))
