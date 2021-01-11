@@ -207,3 +207,18 @@ def fetch_tweets(hashtag, since_id=None, lang='pl', result_type='recent', count=
             break
         tweets.extend(response_json['statuses'])
     return tweets
+
+def map_tweets(tweets):
+    mapped_tweets = []
+    for tweet in tweets:
+        if tweet['truncated']: # skip truncated tweets - idk if this is sufficiant
+            continue
+        if tweet.get('retweeted_status'): # skip retweets
+            continue
+        mapped_tweets.append({
+            "text": tweet['text'],
+            "created_at": datetime.datetime.strptime(tweet['created_at'], "%a %b %d %H:%M:%S %z %Y"),
+            "id": tweet['id']
+        })
+    
+    return mapped_tweets
