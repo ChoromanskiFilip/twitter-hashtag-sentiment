@@ -1,5 +1,6 @@
 import pyodbc
 from configparser import ConfigParser
+import datetime
 
 config = ConfigParser()
 config.read("config.ini")
@@ -11,15 +12,22 @@ conn = pyodbc.connect(
     'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
 
 
-def extract_unprocessed_tweets(tweets):
+def extract_unprocessed_tweets(all_tweets):
+    twitter_ids = []
+    for tweets_for_hashtag in all_tweets:
+        for tweet in tweets_for_hashtag['tweets']:
+            twitter_ids.append(tweet['twitter_id'])
+    twitter_ids = list(map(str, twitter_ids))
+    twitter_ids = "(" + ", ".join(twitter_ids) + ")"
     cursor = conn.cursor()
-    aggregated_tweets = list(map(lambda x: "'" + x + "'", tweets))
-    aggregated_tweets = '(' + ', '.join(aggregated_tweets) + ')'
-    cursor.execute(f'SELECT * from Tweets t where t.tweet in {aggregated_tweets}')
+    cursor.execute(f'SELECT * from Tweets t where t.twitter_id in {twitter_ids}')
     for row in cursor:
-        tweet = row[2]
-        tweets.remove(tweet)
-    return tweets
+        twitter_id = row[6]
+        for tweets_for_hashtag in all_tweets:
+            for tweet in tweets_for_hashtag['tweets']:
+                if tweet['twitter_id'] == twitter_id:
+                    tweets_for_hashtag['tweets'].remove(tweet)
+    return all_tweets
 
 
 def get_tweets_with_sentiment(hashtag):
@@ -42,18 +50,23 @@ def get_tweets_with_sentiment(hashtag):
     return results
 
 
-def save_tweets_with_sentiment(hashtag, tweets):
-    hashtag_id = find_hashtag_id(hashtag)
-    if hashtag_id == None:
-        save_hashtag(hashtag)
-        hashtag_id = find_hashtag_id(hashtag)
-    for entry in tweets:
-        cursor = conn.cursor()
-        cursor.execute("""INSERT INTO Tweets(hashtag_id, tweet, sentiment_result, positive_value, negative_value) 
-                        VALUES (?, ?, ?, ?, ?)""",
-                       hashtag_id, entry['tweet'], entry['sentiment_result'], entry['positive_value'],
-                       entry['negative_value'])
-        conn.commit()
+def save_tweets_with_sentiment(all_tweets):
+    for tweets_for_hashtag in all_tweets:
+        hashtag = tweets_for_hashtag['hashtag']
+        for tweet in tweets_for_hashtag['tweets']:
+            hashtag_id = find_hashtag_id(hashtag)
+            if hashtag_id == None:
+                save_hashtag(hashtag)
+                hashtag_id = find_hashtag_id(hashtag)
+            created_at = datetime.datetime.strptime(tweet['twitter_created_at'], "%a %b %d %X +0000 %Y")
+            created_at.strftime("%Y-%m-%d %H:%M:%S")
+            cursor = conn.cursor()
+            cursor.execute("""INSERT INTO Tweets(hashtag_id, tweet, sentiment_result, positive_value, negative_value,
+                              twitter_id, twitter_created_at) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                           hashtag_id, tweet['text'], tweet['sentiment_result'], tweet['positive_value'],
+                           tweet['negative_value'], tweet['twitter_id'], created_at)
+            conn.commit()
 
 
 def find_hashtag_id(hashtag):

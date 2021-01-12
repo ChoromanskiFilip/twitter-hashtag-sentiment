@@ -72,10 +72,23 @@ def fetch_tweets_v3(hashtag, since_id=None, lang='pl', result_type='recent', cou
         if r.status_code == 200:
             response_json = r.json()
         else:
-            #something went wrong - idk how to handle
             break
         tweets.extend(response_json['statuses'])
     return tweets
+
+def collect_tweets(hashtags):
+    collected_tweets = []
+    for hashtag in hashtags:
+        fetched_response = fetch_tweets_v3(hashtag)
+        collected_tweets.append({
+            'hashtag': hashtag,
+            'tweets': list(map(lambda tw: {
+                'twitter_id': tw['id'],
+                'text': tw['text'],
+                'twitter_created_at': tw['created_at']
+            }, fetched_response))
+        })
+    return collected_tweets
         
 
 
@@ -83,8 +96,8 @@ if __name__ == "__main__":
     # tweets = fetch_tweets('IgaŚwiątek', lang='pl', result_type='recent', count=10)
     # print(tweets)
     # print(tweets.json())
+    # collected_tweets = collect_tweets(['IgaŚwiątek', 'AndrzejDuda'])
 
-    
     with open('response_cout2_since-1348018862315466755.json', 'w', encoding='utf-8') as f:
         # resp = fetch_tweets_v2('IgaŚwiątek', count=100, result_type='recent').json()
         # json.dump(resp, f, ensure_ascii=False, indent=2)
