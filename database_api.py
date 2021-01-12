@@ -1,6 +1,5 @@
 import pyodbc
 from configparser import ConfigParser
-import datetime
 
 config = ConfigParser()
 config.read("config.ini")
@@ -58,14 +57,12 @@ def save_tweets_with_sentiment(all_tweets):
             if hashtag_id == None:
                 save_hashtag(hashtag)
                 hashtag_id = find_hashtag_id(hashtag)
-            created_at = datetime.datetime.strptime(tweet['twitter_created_at'], "%a %b %d %X +0000 %Y")
-            created_at.strftime("%Y-%m-%d %H:%M:%S")
             cursor = conn.cursor()
             cursor.execute("""INSERT INTO Tweets(hashtag_id, tweet, sentiment_result, positive_value, negative_value,
                               twitter_id, twitter_created_at) 
                             VALUES (?, ?, ?, ?, ?, ?, ?)""",
                            hashtag_id, tweet['text'], tweet['sentiment_result'], tweet['positive_value'],
-                           tweet['negative_value'], tweet['twitter_id'], created_at)
+                           tweet['negative_value'], tweet['twitter_id'], tweet['twitter_created_at'])
             conn.commit()
 
 
