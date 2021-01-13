@@ -1,3 +1,6 @@
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+
 import datetime
 import logging
 import azure.functions as func
@@ -5,10 +8,13 @@ import requests
 from configparser import RawConfigParser
 import aspect_based_sentiment_analysis as absa
 import pyodbc
-import os
 
 config = RawConfigParser()
-config.read(os.path.join(os.path.dirname(__file__), 'config.ini'))
+config_path = os.path.join(os.path.dirname(__file__), 'config.ini')
+logging.info(f"Config file path: {config_path}")
+config.read(config_path)
+
+logging.info(f"Config file content: {config.get('Database', 'server_url', fallback='No such things as config[Database][server_url]')}")
 server = 'tcp:' + config['Database']['server_url']
 database = config['Database']['database_name']
 username = config['Database']['username']
@@ -18,9 +24,14 @@ conn = pyodbc.connect(
 nlp = absa.load()
 
 def main(mytimer: func.TimerRequest) -> None:
+    logging.info(f"Function triggered...")
+    logging.info(f"Config file path: {config_path}")
+    logging.info(f"Config file content: {config.get('Database', 'server_url', fallback='No such things as config[Database][server_url]')}")
+    
     utc_timestamp = datetime.datetime.utcnow().replace(
         tzinfo=datetime.timezone.utc).isoformat()
 
+    
     if mytimer.past_due:
         logging.info('The timer is past due!')
 
