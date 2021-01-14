@@ -35,3 +35,10 @@ def tweetToDict(tweet):
         'twitter_id':tweet.twitter_id,
         'twitter_created_at': tweet.twitter_created_at
     }
+
+def hashtagToDict(hashtag):
+    return {
+        'id': hashtag.id,
+        'hashtag': hashtag.hashtag,
+        'active': hashtag.active
+    }
