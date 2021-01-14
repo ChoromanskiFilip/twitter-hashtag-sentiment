@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 import { DiscreteColorLegend, Hint, RadialChart } from 'react-vis';
 
 class PieChart extends React.Component {
@@ -22,33 +22,46 @@ class PieChart extends React.Component {
   render() {
     var hintObjTest = this.state.hintObjTest;
     return (
-      <Row>
-        <Col xs={4} style={{ marginTop: '50px', paddingRight: '5px' }}>
-          <DiscreteColorLegend
-            orientation='vertical'
-            items={this.props.data.map(d => {
-              return { title: d.label, strokeWidth: 20 };
-            })}
-            // @ts-ignore
-            colors={this.props.data.map(d => d.color)}
-          />
-        </Col>
-        <Col xs={8} style={{ paddingLeft: '5px' }}>
-          <RadialChart
-            data={this.props.data}
-            radius={115}
-            height={240}
-            width={240}
-            colorType='literal'
-            onValueMouseOver={(v) => this.setState({ hintObjTest: v }) }
-            onMouseLeave={() => this.setState({ hintObjTest: null }) }
-          >
-            {hintObjTest &&
-              <Hint value={hintObjTest} format={(d) => this.formatHint(d)}/>
-            }
-          </RadialChart>
-        </Col>
-      </Row>
+      <div>
+        {
+          this.props.data ?
+            <Row>
+              <Col xs={4} style={{ marginTop: '50px', paddingRight: '5px' }}>
+                <DiscreteColorLegend
+                  orientation='vertical'
+                  items={this.props.data.map(d => {
+                    return { title: d.label, strokeWidth: 20 };
+                  })}
+                  // @ts-ignore
+                  colors={this.props.data.map(d => d.color)}
+                />
+              </Col>
+              <Col xs={8} style={{ paddingLeft: '5px' }}>
+                <RadialChart
+                  data={this.props.data}
+                  radius={115}
+                  height={240}
+                  width={240}
+                  colorType='literal'
+                  onValueMouseOver={(v) => this.setState({ hintObjTest: v })}
+                  onMouseLeave={() => this.setState({ hintObjTest: null })}
+                >
+                  {hintObjTest &&
+                    <Hint value={hintObjTest} format={(d) => this.formatHint(d)} />
+                  }
+                </RadialChart>
+              </Col>
+            </Row>
+            :
+            <Card>
+              <Card.Body>
+                <Card.Text style={{ textAlign: 'center', fontSize: '1.2rem' }}>
+                  Sentiment distribution chart - select hashtag to show
+                </Card.Text>
+              </Card.Body>
+            </Card>
+        }
+      </div>
     );
   }
 }

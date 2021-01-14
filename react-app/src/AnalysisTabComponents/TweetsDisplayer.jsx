@@ -5,13 +5,13 @@ import Card from 'react-bootstrap/Card'
 function TweetsDisplayer(props) {
   // const tweets = props.tweetsList ? this.props.tweetsList : null;
   return (
-    <div style={{ margin: '40px 0px' }}>
-      {props.tweetsList
+    <div style={{ margin: '30px 0px' }}>
+      { props.tweetsList
         ?
         <CardDeck>
           {props.tweetsList.map((obj, i) => {
             return (
-              <Card key={i} style={{  width: '20%', maxWidth: 400}}>
+              <Card key={i} style={{ maxWidth: 400 }}>
                 <Card.Body>
                   {/* <Card.Title>Card title</Card.Title> */}
                   <Card.Text>
@@ -26,7 +26,13 @@ function TweetsDisplayer(props) {
           })}
         </CardDeck>
         :
-        <Card>No tweets</Card>
+        <Card>
+          <Card.Body>
+            <Card.Text style={{textAlign: 'center', fontSize: '1.2rem'}}>
+              Example tweets - select hashtag to show
+          </Card.Text>
+          </Card.Body>
+        </Card>
       }
     </div>
   );

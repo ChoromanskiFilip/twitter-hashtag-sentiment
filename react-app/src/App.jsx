@@ -93,10 +93,10 @@ class App extends React.Component {
     super(props);
     this.state = {
       hashtagsList: MOCKhashtagsList,
-      exampleTweetsList: MOCKtweetsList,
+      exampleTweetsList: null,
       analysisSelectedHashtag: null,
-      linePlotData: MOCKlinePlotData,
-      pieChartData: MOCKpieChartData
+      linePlotData: null,
+      pieChartData: null
 
     };
   }
@@ -104,7 +104,12 @@ class App extends React.Component {
   analysisSetSelected = (id) => {
     if (this.state.analysisSelectedHashtag && id === this.state.analysisSelectedHashtag.id)
       return;
-    this.setState({ analysisSelectedHashtag: this.state.hashtagsList.find(x => x.id === id) })
+    this.setState({ 
+      analysisSelectedHashtag: this.state.hashtagsList.find(x => x.id === id),
+      exampleTweetsList: MOCKtweetsList,
+      linePlotData: MOCKlinePlotData,
+      pieChartData: MOCKpieChartData
+    });
   }
 
   render() {
