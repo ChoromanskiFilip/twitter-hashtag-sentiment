@@ -43,7 +43,7 @@ api = tweepy.API(auth)
 def collect_tweets(hashtags):
     collected_tweets = []
     for hashtag in hashtags:
-        fetched_response = api.search(q=hashtag, lang="pl", rpp=100, tweet_mode='extended')
+        fetched_response = api.search(q=hashtag + " -filter:retweets", lang="pl", rpp=100, tweet_mode='extended')
         collected_tweets.append({
             'hashtag': hashtag,
             'tweets': list(map(lambda tw: {
