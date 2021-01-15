@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from configparser import ConfigParser
 from sqlalchemy.sql import func, extract, asc, cast
 from sqlalchemy import Date
+from flask_cors import CORS, cross_origin
 
 config = ConfigParser()
 config.read("config.ini")
@@ -13,12 +14,15 @@ username = config['Database']['username']
 password = config['Database']['password']
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 app.config[
     'SQLALCHEMY_DATABASE_URI'] = f'mssql+pyodbc://{username}:{password}@{server}/{database}?driver=ODBC+Driver+17+for+SQL+Server'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
+@cross_origin()
 @app.route("/tweets", methods=['GET'])
 def get_tweets():
     limit = request.args.get('limit')
@@ -38,6 +42,7 @@ def get_tweets(limit, hashtag):
     return tweets
 
 
+@cross_origin()
 @app.route("/hashtags", methods=['GET'])
 def get_hashtags():
     hashtags = models.Hashtag.query.all()
@@ -45,6 +50,7 @@ def get_hashtags():
     return jsonify(hashtags)
 
 
+@cross_origin()
 @app.route("/daily_statistics", methods=['GET'])
 def get_daily_statistics():
     hashtag = request.args.get('hashtag')
@@ -72,6 +78,7 @@ def get_daily_statistics(hashtag):
     return daily_sentiment
 
 
+@cross_origin()
 @app.route("/overall_statistics", methods=['GET'])
 def get_overall_statistics():
     hashtag = request.args.get('hashtag')
@@ -104,6 +111,8 @@ def get_overall_statistics(hashtag):
         'tweets_negative_percent': tweets_negative / all,
     }
 
+
+@cross_origin()
 @app.route("/hashtag_summary", methods=['GET'])
 def get_hashtag_summary():
     hashtag = request.args.get('hashtag')
