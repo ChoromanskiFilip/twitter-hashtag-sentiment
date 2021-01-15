@@ -11,23 +11,28 @@ import 'App.css';
 const MOCKhashtagsList = [
   {
     id: 1,
-    hashtag: '#AndrzejDuda'
+    hashtag: 'AndrzejDuda',
+    active: true
   },
   {
     id: 2,
-    hashtag: '#IgaŚwiątek'
+    hashtag: 'IgaŚwiątek',
+    active: true
   },
   {
     id: 4,
-    hashtag: '#kwarantanna'
+    hashtag: 'kwarantanna',
+    active: true
   },
   {
     id: 7,
-    hashtag: '#wośp'
+    hashtag: 'wośp',
+    active: false
   },
   {
     id: 10,
-    hashtag: '#test'
+    hashtag: 'test',
+    active: false
   }
 ]
 

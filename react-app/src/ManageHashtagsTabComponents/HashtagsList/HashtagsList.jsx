@@ -11,6 +11,7 @@ function HashtagsList(props) {
           <tr>
             <th>ID</th>
             <th>Hashtag</th>
+            <th>Active</th>
           </tr>
         </thead>
         <tbody>
