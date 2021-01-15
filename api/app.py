@@ -12,6 +12,7 @@ server = config['Database']['server_url']
 database = config['Database']['database_name']
 username = config['Database']['username']
 password = config['Database']['password']
+security_token = config['API']['security_token']
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -43,11 +44,26 @@ def get_tweets(limit, hashtag):
 
 
 @cross_origin()
-@app.route("/hashtags", methods=['GET'])
-def get_hashtags():
-    hashtags = models.Hashtag.query.all()
-    hashtags = list(map(lambda x: models.hashtagToDict(x), hashtags))
-    return jsonify(hashtags)
+@app.route("/hashtags", methods=['GET', 'POST'])
+def hashtags():
+    if request.method == 'GET':
+        hashtags = models.Hashtag.query.all()
+        hashtags = list(map(lambda x: models.hashtagToDict(x), hashtags))
+        return jsonify(hashtags)
+    if request.method == 'POST':
+        data = request.form
+        hashtag = data['hashtag']
+        token = data['token']
+        if token == security_token:
+            if '#' in hashtag or '@' in hashtag:
+                return 'Hashtag cannot contain special characters!', 400
+            db.session.add(models.Hashtag(hashtag=hashtag, active=True))
+            db.session.commit()
+            return 'Hashtag added', 200
+        else:
+            return 'Invalid token', 400
+    else:
+        return 'Invalid method type'
 
 
 @cross_origin()
