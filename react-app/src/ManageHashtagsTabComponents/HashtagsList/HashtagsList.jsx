@@ -13,11 +13,18 @@ function HashtagsList(props) {
             <th>Hashtag</th>
           </tr>
         </thead>
-        <tbody>
-          {props.hashtagsList.map((object, i) => {
-            return <HashtagsListRow row_obj={object} key={i} />;
-          })}
-        </tbody>
+        {props.hashtagsList ?
+          <tbody>
+            {props.hashtagsList.map((object, i) => {
+              return <HashtagsListRow row_obj={object} key={i} />;
+            })}
+          </tbody>
+          :
+          <tbody>
+            <tr><td>No data</td></tr>
+          </tbody>
+        }
+
       </Table>
     </div>
   );

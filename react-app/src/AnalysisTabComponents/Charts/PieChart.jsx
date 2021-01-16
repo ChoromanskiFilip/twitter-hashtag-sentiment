@@ -14,7 +14,8 @@ class PieChart extends React.Component {
     let dataPointOriginal = this.props.data.find(x => x.label == dataPoint.label);
     return [
       { title: 'sentiment', value: dataPointOriginal.label },
-      { title: '% of tweets', value: dataPointOriginal.angle.toFixed(2) }
+      { title: '% of tweets', value: dataPointOriginal.angle.toFixed(2) },
+      { title: '# of tweets', value: dataPointOriginal.count }
     ];
   }
 

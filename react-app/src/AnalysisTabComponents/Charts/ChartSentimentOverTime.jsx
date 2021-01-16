@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
-import { Hint, HorizontalGridLines, LineSeries, VerticalGridLines, XAxis, XYPlot, YAxis } from 'react-vis';
+import { Hint, HorizontalGridLines, LineSeries, MarkSeries, VerticalGridLines, XAxis, XYPlot, YAxis } from 'react-vis';
 
 class ChartSentimentOverTime extends React.Component {
   constructor(props) {
@@ -14,7 +14,8 @@ class ChartSentimentOverTime extends React.Component {
     let formatedDate = `${dataPoint.x.getFullYear()}-${dataPoint.x.getMonth() + 1}-${dataPoint.x.getDate()}`
     return [
       { title: 'date', value: formatedDate },
-      { title: '% of positive', value: dataPoint.y.toFixed(2) }
+      { title: '% of positive', value: dataPoint.y.toFixed(2) },
+      { title: '# of tweets', value: dataPoint.tweets }
     ]
   }
 
@@ -45,12 +46,16 @@ class ChartSentimentOverTime extends React.Component {
                 }}
               />
               <LineSeries
+                getNull={(d) => d.y !== null}
                 data={this.props.data}
                 style={{
                   strokeLinejoin: 'round',
                   strokeWidth: 4
                 }}
-                onNearestXY={(value) => this.setState({ hintValue: value })}
+                onNearestXY={(value) => value.y !== null ? this.setState({ hintValue: value }) : null}
+              />
+              <MarkSeries
+                data={this.props.data.filter(x => x.y !== null)} 
               />
               {this.state.hintValue &&
                 <Hint value={this.state.hintValue} format={(d) => this.formatHint(d)} />
