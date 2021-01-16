@@ -11,7 +11,9 @@ class ChartSentimentOverTime extends React.Component {
   }
 
   formatHint = (dataPoint) => {
-    let formatedDate = `${dataPoint.x.getFullYear()}-${dataPoint.x.getMonth() + 1}-${dataPoint.x.getDate()}`
+    let monthZeroPadded = (dataPoint.x.getMonth() + 1).toString();
+    monthZeroPadded = monthZeroPadded.length === 1 ? '0' + monthZeroPadded : monthZeroPadded;
+    let formatedDate = `${dataPoint.x.getFullYear()}-${monthZeroPadded}-${dataPoint.x.getDate()}`
     return [
       { title: 'date', value: formatedDate },
       { title: '% of positive', value: dataPoint.y.toFixed(2) },

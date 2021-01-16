@@ -8,7 +8,6 @@ class ManageHashtagsTab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hashtagsList: props.hashtagsList,
       showModal: false,
     };
   }
@@ -31,7 +30,7 @@ class ManageHashtagsTab extends React.Component {
         <Button style={{margin: '20px 0px'}} variant="info" block onClick={this.handleOpen}>
           Add hashtag
         </Button>
-        <HashtagsList hashtagsList={this.state.hashtagsList}/>
+        <HashtagsList hashtagsList={this.props.hashtagsList}/>
       </div>
       </React.Fragment>
     );
