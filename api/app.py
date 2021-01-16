@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from configparser import ConfigParser
 from sqlalchemy.sql import func, extract, asc, cast
 from sqlalchemy import Date
+from flask_cors import CORS, cross_origin
 
 config = ConfigParser()
 config.read("config.ini")
@@ -11,14 +12,18 @@ server = config['Database']['server_url']
 database = config['Database']['database_name']
 username = config['Database']['username']
 password = config['Database']['password']
+security_token = config['API']['security_token']
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 app.config[
     'SQLALCHEMY_DATABASE_URI'] = f'mssql+pyodbc://{username}:{password}@{server}/{database}?driver=ODBC+Driver+17+for+SQL+Server'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
+@cross_origin()
 @app.route("/tweets", methods=['GET'])
 def get_tweets():
     limit = request.args.get('limit')
@@ -38,13 +43,30 @@ def get_tweets(limit, hashtag):
     return tweets
 
 
-@app.route("/hashtags", methods=['GET'])
-def get_hashtags():
-    hashtags = models.Hashtag.query.all()
-    hashtags = list(map(lambda x: models.hashtagToDict(x), hashtags))
-    return jsonify(hashtags)
+@cross_origin()
+@app.route("/hashtags", methods=['GET', 'POST'])
+def hashtags():
+    if request.method == 'GET':
+        hashtags = models.Hashtag.query.all()
+        hashtags = list(map(lambda x: models.hashtagToDict(x), hashtags))
+        return jsonify(hashtags)
+    if request.method == 'POST':
+        data = request.form
+        hashtag = data['hashtag']
+        token = data['token']
+        if token == security_token:
+            if '#' in hashtag or '@' in hashtag:
+                return 'Hashtag cannot contain special characters!', 400
+            db.session.add(models.Hashtag(hashtag=hashtag, active=True))
+            db.session.commit()
+            return 'Hashtag added', 200
+        else:
+            return 'Invalid token', 400
+    else:
+        return 'Invalid method type'
 
 
+@cross_origin()
 @app.route("/daily_statistics", methods=['GET'])
 def get_daily_statistics():
     hashtag = request.args.get('hashtag')
@@ -72,6 +94,7 @@ def get_daily_statistics(hashtag):
     return daily_sentiment
 
 
+@cross_origin()
 @app.route("/overall_statistics", methods=['GET'])
 def get_overall_statistics():
     hashtag = request.args.get('hashtag')
@@ -104,6 +127,8 @@ def get_overall_statistics(hashtag):
         'tweets_negative_percent': tweets_negative / all,
     }
 
+
+@cross_origin()
 @app.route("/hashtag_summary", methods=['GET'])
 def get_hashtag_summary():
     hashtag = request.args.get('hashtag')
