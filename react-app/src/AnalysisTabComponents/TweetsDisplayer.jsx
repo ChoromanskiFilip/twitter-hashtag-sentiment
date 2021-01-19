@@ -2,6 +2,17 @@ import React from 'react';
 import CardDeck from 'react-bootstrap/CardDeck'
 import Card from 'react-bootstrap/Card'
 
+function getColorForSentiment(sentiment) {
+  switch (sentiment) {
+    case 'positive':
+      return 'green'
+    case 'negative':
+      return 'red'
+    default:
+      return 'grey'
+  }
+}
+
 function TweetsDisplayer(props) {
   const tweetsNum = props.tweetsNumShow ? props.tweetsNumShow : props.tweetsList.length;
   return (
@@ -19,7 +30,7 @@ function TweetsDisplayer(props) {
                     </Card.Text>
                   </Card.Body>
                   <Card.Footer>
-                    <small className="text-muted">Sentiment: <b>{obj.sentiment}</b></small>
+                  <small className="text-muted" >Sentiment: <b style={{color: getColorForSentiment(obj.sentiment)}}>{obj.sentiment}</b></small>
                   </Card.Footer>
                 </Card>
               );
