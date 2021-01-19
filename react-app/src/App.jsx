@@ -60,7 +60,9 @@ class App extends React.Component {
         this.setState({
           analysisSelectedHashtag: selectedTag,
           exampleTweetsList: json.sample_tweets.map(x => { return { text: x.tweet, sentiment: x.sentiment_result } }),
-          linePlotData: json.daily_statistics.map(x => { return { x: new Date(x.date), y: x.positive_percent, tweets: x.tweets } }),
+          linePlotData: json.daily_statistics.map(x => {
+            return { x: new Date(x.date), y: x.positive_percent, tweets: x.tweets }
+          }).sort((a, b) => { return new Date(a.x).getTime() - new Date(b.x).getTime() }),
           pieChartData: this.mapOverallStatistics(json.overall_statistics)
         })
       );
