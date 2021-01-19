@@ -18,7 +18,7 @@ function ChartsSection(props) {
         </Col>
         <Col>
           <h3>Sentiment distribution</h3>
-          <Container style={{marginTop: '40px'}}>
+          <Container>
             <PieChart data={props.pieChartData} />
           </Container>
         </Col>
