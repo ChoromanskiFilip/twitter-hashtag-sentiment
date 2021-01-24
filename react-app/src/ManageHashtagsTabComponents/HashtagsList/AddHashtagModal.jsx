@@ -5,9 +5,12 @@ class AddHashtagModal extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            newHashtag: "",
+        };
     }
 
-    handleChange = (event) => console.log(event.target.value) 
+    handleChange = (event) => this.setState({newHashtag: event.target.value})
 
     render() {
         return (
@@ -23,7 +26,7 @@ class AddHashtagModal extends React.Component {
                     <FormControl placeholder="Hashtag" onChange={this.handleChange}/>
                 </InputGroup>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={this.props.handleClose}> Add </Button>
+                    <Button variant="primary" onClick={() => this.props.handleClose(this.state.newHashtag)}> Add </Button>
                 </Modal.Footer>
             </Modal>
         )

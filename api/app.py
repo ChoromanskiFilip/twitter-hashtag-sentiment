@@ -51,7 +51,7 @@ def hashtags():
         hashtags = list(map(lambda x: models.hashtagToDict(x), hashtags))
         return jsonify(hashtags)
     if request.method == 'POST':
-        data = request.form
+        data = request.json
         hashtag = data['hashtag']
         token = data['token']
         if token == security_token:

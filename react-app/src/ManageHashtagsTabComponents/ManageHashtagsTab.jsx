@@ -2,6 +2,7 @@ import Button from 'react-bootstrap/Button';
 import React from 'react';
 import HashtagsList from './HashtagsList/HashtagsList';
 import AddHashtagModal from './HashtagsList/AddHashtagModal'
+import { Config } from 'Config';
 
 class ManageHashtagsTab extends React.Component {
 
@@ -16,8 +17,21 @@ class ManageHashtagsTab extends React.Component {
     this.setState({showModal: true})
   }
 
-  handleClose = () => {
+  handleClose = (newHashtag) => {
     this.setState({showModal: false})
+    if (newHashtag == undefined) {
+      return
+    }
+    const requestOptions = {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Accept': 'text/plain'
+       },
+      body: JSON.stringify({ 'hashtag': newHashtag, 'token': Config.BEARER_TOKEN})
+    };
+    fetch(Config.endpoints.HASHTAG_ADD, requestOptions)
+        .then(() => this.props.reload())
   }
 
   render() {

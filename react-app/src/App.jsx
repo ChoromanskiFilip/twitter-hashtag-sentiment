@@ -1,6 +1,7 @@
 import React from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
+import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 
 import AnalysisTab from 'AnalysisTabComponents/AnalysisTab';
@@ -23,11 +24,15 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    this.reload()
+  }
+
+  reload = () => {
     fetch(Config.endpoints.HASHTAGS_LIST)
-      .then(res => {
-        return res.json()
-      })
-      .then(json => this.setState({ hashtagsList: json }));
+    .then(res => {
+      return res.json()
+    })
+    .then(json => this.setState({ hashtagsList: json }));
   }
 
   mapOverallStatistics = (stats) => {
@@ -70,26 +75,27 @@ class App extends React.Component {
 
   render() {
     return (
-      <Container >
-        <Tabs defaultActiveKey="analysis" id="uncontrolled-tab-example" fill className="tab-inactive">
-          <Tab eventKey="analysis" title="Analysis" >
-            <AnalysisTab
-              hashtagsList={this.state.hashtagsList}
-              selectedHashtag={this.state.analysisSelectedHashtag}
-              setSelectedHashtag={this.analysisSetSelected.bind(this)}
-              exampleTweets={this.state.exampleTweetsList}
-              tweetsNumShow={3}
-              linePlotData={this.state.linePlotData}
-              pieChartData={this.state.pieChartData}
-            />
-          </Tab>
-          <Tab eventKey="manage" title="Manage hashtags">
-            <ManageHashtagsTab
-              hashtagsList={this.state.hashtagsList}
-            />
-          </Tab>
-        </Tabs>
-      </Container>
+        <Container>
+          <Tabs defaultActiveKey="analysis" id="uncontrolled-tab-example" fill className="tab-inactive">
+            <Tab eventKey="analysis" title="Analysis" >
+              <AnalysisTab
+                hashtagsList={this.state.hashtagsList}
+                selectedHashtag={this.state.analysisSelectedHashtag}
+                setSelectedHashtag={this.analysisSetSelected.bind(this)}
+                exampleTweets={this.state.exampleTweetsList}
+                tweetsNumShow={3}
+                linePlotData={this.state.linePlotData}
+                pieChartData={this.state.pieChartData}
+              />
+            </Tab>
+            <Tab eventKey="manage" title="Manage hashtags">
+              <ManageHashtagsTab
+                hashtagsList={this.state.hashtagsList}
+                reload = {this.reload}
+              />
+            </Tab>
+          </Tabs>
+        </Container>
     );
   }
 }
