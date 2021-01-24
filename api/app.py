@@ -67,6 +67,25 @@ def hashtags():
 
 
 @cross_origin()
+@app.route("/hashtag_update", methods=['POST'])
+def hashtag_update():
+    data = request.json
+    hashtag = data['hashtag']
+    token = data['token']
+    active = data['active']
+    if token == security_token:
+        if '#' in hashtag or '@' in hashtag:
+            return 'Hashtag cannot contain special characters!', 400
+        entity = models.Hashtag.query.filter_by(hashtag=hashtag).first()
+        entity.active = active
+        db.session.merge(entity)
+        db.session.commit()
+        return 'Hashtag edited', 200
+    else:
+        return 'Invalid token', 400
+
+
+@cross_origin()
 @app.route("/daily_statistics", methods=['GET'])
 def get_daily_statistics():
     hashtag = request.args.get('hashtag')

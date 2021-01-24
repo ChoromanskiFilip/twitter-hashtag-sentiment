@@ -1,12 +1,17 @@
 import React from 'react';
 import BootstrapSwitchButton from 'bootstrap-switch-button-react'
+import { Config } from 'Config';
 
 function handleChange(checked, hashtag) {
-    if (checked == false) {
-        console.log(`Send API request to make hashtag ${hashtag} inactive`)
-    } else {
-        console.log(`Send API request to make hashtag ${hashtag} active`)
-    }
+    const requestOptions = {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'text/plain'
+         },
+        body: JSON.stringify({'hashtag': hashtag, 'active': checked, 'token': Config.BEARER_TOKEN})
+      };
+      fetch(Config.endpoints.HASHTAG_UPDATE, requestOptions)
 }
 
 function HashtagsListRow(props) {
