@@ -26,16 +26,19 @@ def main():
         hashtag = tweets_for_hashtag['hashtag']
         analysed_tweets_for_hashtag = []
         for tweet in tweets_for_hashtag['tweets']:
-            logging.info(f'Computing sentiment of tweet: {tweet}')
-            sentiment = process(tweet['text'], hashtag)
-            analysed_tweets_for_hashtag.append({
-                'text': tweet['text'],
-                'twitter_id': tweet['twitter_id'],
-                'twitter_created_at': tweet['twitter_created_at'],
-                'sentiment_result': sentiment['sentiment_result'],
-                'positive_value': sentiment['positive_value'],
-                'negative_value': sentiment['negative_value']
-            })
+            try:
+                logging.info(f'Computing sentiment of tweet: {tweet}')
+                sentiment = process(tweet['text'], hashtag)
+                analysed_tweets_for_hashtag.append({
+                    'text': tweet['text'],
+                    'twitter_id': tweet['twitter_id'],
+                    'twitter_created_at': tweet['twitter_created_at'],
+                    'sentiment_result': sentiment['sentiment_result'],
+                    'positive_value': sentiment['positive_value'],
+                    'negative_value': sentiment['negative_value']
+                })
+            except Exception as ex:
+                logging.warning(f'Exception {ex} during processing tweet: {tweet}')
         analysed_tweets.append({
             'hashtag': hashtag,
             'tweets': analysed_tweets_for_hashtag
