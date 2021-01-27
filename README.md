@@ -39,6 +39,7 @@ On the welcome screen of web application user will see input field where she/he 
 ### Architecture
 ![Application Archtecture Diagram](pics/architecture-twitter-hashtag-sentiment.png)
 
+
 ### Tech Stack
 
 Microservices:
