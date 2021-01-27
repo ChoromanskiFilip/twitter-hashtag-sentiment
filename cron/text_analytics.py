@@ -38,15 +38,17 @@ def analyze_sentiment_azure(text, aspect):
     location = config['TextAnalyticsAPI']['location']
     response = make_request(sentiment_url, body, subscription_key, location)
     # print(f'Text analytics respone: {response}')
-
-    for sentence in response['documents'][0]['sentences']:
-        for found_aspect in sentence['aspects']:
-            if found_aspect['text'] == aspect:
-                return {
-                    'result': found_aspect['sentiment'],
-                    'positive': found_aspect['confidenceScores']['positive'],
-                    'negative': found_aspect['confidenceScores']['negative']
-                }
+    try:
+        for sentence in response['documents'][0]['sentences']:
+            for found_aspect in sentence['aspects']:
+                if found_aspect['text'] == aspect:
+                    return {
+                        'result': found_aspect['sentiment'],
+                        'positive': found_aspect['confidenceScores']['positive'],
+                        'negative': found_aspect['confidenceScores']['negative']
+                    }
+    except Exception as ex:
+        pass
     return None
 
 
