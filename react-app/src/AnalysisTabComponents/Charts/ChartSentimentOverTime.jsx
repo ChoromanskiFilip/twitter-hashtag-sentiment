@@ -67,7 +67,7 @@ class ChartSentimentOverTime extends React.Component {
             <Card>
               <Card.Body>
                 <Card.Text style={{ textAlign: 'center', fontSize: '1.2rem' }}>
-                  Sentiment over time plot - select hashtag to show
+                  Sentiment over time plot
                 </Card.Text>
               </Card.Body>
             </Card>

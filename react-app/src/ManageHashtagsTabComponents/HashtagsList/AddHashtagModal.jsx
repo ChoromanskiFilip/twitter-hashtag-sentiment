@@ -19,7 +19,7 @@ class AddHashtagModal extends React.Component {
                     <Modal.Title>Adding hashtag</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Provide hashtag without any special characters!</Modal.Body>
-                <InputGroup className="mb-1" >
+                <InputGroup className="mb-1" style={{margin: '0px 10px', width: 'auto'}}>
                     <InputGroup.Prepend>
                         <InputGroup.Text id="basic-addon1" >#</InputGroup.Text>
                     </InputGroup.Prepend>

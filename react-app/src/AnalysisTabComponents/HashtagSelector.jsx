@@ -13,7 +13,7 @@ class HashtagSelector extends React.Component {
 
   componentDidUpdate() {
     if (!this.state.filteredList)
-      this.setState({filteredList: this.props.hashtagsList})
+      this.setState({ filteredList: this.props.hashtagsList })
   }
 
   inputWasClicked = () => {
@@ -61,9 +61,11 @@ class HashtagSelector extends React.Component {
                 onChange={(e) => this.searchTextChanges(e.target.value)}
               />
             </Dropdown.Item>
-            {this.state.filteredList.map((obj, i) => {
-              return <Dropdown.Item key={i} onClick={() => setSelected(obj.id)}>{'#' + obj.hashtag}</Dropdown.Item>;
-            })}
+            <div style={{ maxHeight: 180, overflowY: 'auto' }}>
+              {this.state.filteredList.map((obj, i) => {
+                return <Dropdown.Item key={i} onClick={() => setSelected(obj.id)}>{'#' + obj.hashtag}</Dropdown.Item>;
+              })}
+            </div>
           </Dropdown.Menu>
           :
           <Dropdown.Menu>

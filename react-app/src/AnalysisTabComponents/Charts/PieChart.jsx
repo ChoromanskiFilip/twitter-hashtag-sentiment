@@ -57,7 +57,7 @@ class PieChart extends React.Component {
             <Card>
               <Card.Body>
                 <Card.Text style={{ textAlign: 'center', fontSize: '1.2rem' }}>
-                  Sentiment distribution chart - select hashtag to show
+                  Sentiment distribution chart
                 </Card.Text>
               </Card.Body>
             </Card>
